@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  java:
+    build: ./
+    tty: true
+    #ports:
+    #  - "33007:3306"
+    volumes:
+      - ./app:/app
+
+  rabbit:
+    image: rabbitmq:3.11.11-alpine
+
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
