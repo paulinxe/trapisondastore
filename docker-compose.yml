@@ -2,12 +2,19 @@ version: '3.7'
 
 services:
   java:
-    build: ./
+    build:
+      context: ./
+      args:
+        HOST_USER_ID: ${HOST_USER_ID}
+        HOST_GROUP_ID: ${HOST_GROUP_ID}
+        HOST_USER_NAME: ${HOST_USER_NAME}
+        HOST_GROUP_NAME: ${HOST_GROUP_NAME}
     tty: true
     #ports:
     #  - "33007:3306"
     volumes:
       - ./app:/app
+    user: ${HOST_USER_ID}:${HOST_GROUP_ID}
 
   rabbit:
     image: rabbitmq:3.11.11-alpine
