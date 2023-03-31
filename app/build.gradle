@@ -12,25 +12,13 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	set('axonVersion', "4.6.0")
-}
-
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.axonframework:axon-spring-boot-starter'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation 'org.axonframework:axon-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
-}
-
-dependencyManagement {
-	imports {
-		mavenBom "org.axonframework:axon-bom:${axonVersion}"
-	}
 }
 
 tasks.named('test') {
