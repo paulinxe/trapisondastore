@@ -3,6 +3,7 @@ package com.trapisondastore.trapisondastore.Client.Domain;
 import com.trapisondastore.trapisondastore.Client.Domain.Event.ClientSignedUp;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
+import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientNameException;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientAddress;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientId;
@@ -44,6 +45,15 @@ public final class Client extends AggregateRoot {
 
     public ClientAddress address() {
         return address;
+    }
+
+    public static Client fromPersistence(String id, String name, String email, String address) throws InvalidClientIdException, InvalidClientNameException, InvalidClientEmailException {
+        return new Client(
+            new ClientId(id),
+            new ClientName(name),
+            new ClientEmail(email),
+            new ClientAddress(address)
+        );
     }
 
     public static Client signUp(String id, String email, String password)
