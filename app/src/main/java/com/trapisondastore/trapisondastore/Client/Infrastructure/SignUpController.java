@@ -2,7 +2,6 @@ package com.trapisondastore.trapisondastore.Client.Infrastructure;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpCommand;
 import com.trapisondastore.trapisondastore.Shared.Domain.Bus.Command.Command;
@@ -30,6 +28,8 @@ public class SignUpController extends Controller {
         }
 
         Command command = new SignUpCommand(request.name, request.email, request.password);
+
+        commandBus.dispatch(command);
 
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("id", 3);

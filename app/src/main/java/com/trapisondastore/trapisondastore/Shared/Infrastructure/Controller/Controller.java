@@ -9,11 +9,15 @@ import org.springframework.validation.BindingResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.trapisondastore.trapisondastore.Shared.Domain.Bus.Command.CommandBus;
 
 public abstract class Controller {
 
     @Autowired
     protected ObjectMapper mapper;
+
+    @Autowired
+    protected CommandBus commandBus;
 
     protected Optional<ResponseEntity<ObjectNode>> failIfValidationErrors(BindingResult validation) {
         ObjectNode objectNode = mapper.createObjectNode();
