@@ -16,9 +16,6 @@ public abstract class Controller {
     @Autowired
     protected ObjectMapper mapper;
 
-    @Autowired
-    protected CommandBus commandBus;
-
     protected Optional<ResponseEntity<ObjectNode>> failIfValidationErrors(BindingResult validation) {
         ObjectNode objectNode = mapper.createObjectNode();
 

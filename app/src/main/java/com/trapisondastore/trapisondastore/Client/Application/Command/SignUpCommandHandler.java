@@ -2,7 +2,7 @@ package com.trapisondastore.trapisondastore.Client.Application.Command;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.trapisondastore.trapisondastore.Client.Application.UseCase.SignUpUseCase;
+import com.trapisondastore.trapisondastore.Client.Application.Command.UseCase.SignUpUseCase;
 import com.trapisondastore.trapisondastore.Shared.Domain.Bus.Command.Command;
 import com.trapisondastore.trapisondastore.Shared.Domain.Bus.Command.CommandHandler;
 

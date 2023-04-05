@@ -29,8 +29,6 @@ public class SignUpController extends Controller {
 
         Command command = new SignUpCommand(request.name, request.email, request.password);
 
-        commandBus.dispatch(command);
-
         ObjectNode objectNode = mapper.createObjectNode();
         objectNode.put("id", 3);
         objectNode.put("name", "test");

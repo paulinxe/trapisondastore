@@ -1,4 +1,4 @@
-package com.trapisondastore.trapisondastore.Client.Application.UseCase;
+package com.trapisondastore.trapisondastore.Client.Application.Command.UseCase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +26,6 @@ public class SignUpUseCase {
             e.printStackTrace();
         }
         
-        repository.findByCriteria();
+        // repository.findByCriteria();
     }
 }
