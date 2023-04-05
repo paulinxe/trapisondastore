@@ -4,6 +4,7 @@ import com.trapisondastore.trapisondastore.Client.Domain.Event.ClientSignedUp;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientNameException;
+import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientPasswordException;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientAddress;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientId;
@@ -57,7 +58,7 @@ public final class Client extends AggregateRoot {
     }
 
     public static Client signUp(String id, String email, String password)
-            throws InvalidClientIdException, InvalidClientEmailException {
+            throws InvalidClientIdException, InvalidClientEmailException, InvalidClientPasswordException {
         Client client = new Client(new ClientId(id), new ClientEmail(email), new ClientPassword(password));
 
         client.registerEvent(new ClientSignedUp(client.id().value().toString(), client.email().value()));
