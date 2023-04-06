@@ -33,4 +33,10 @@ public class JPAClientRepository implements ClientRepository {
             throw new UnableToBuildAggregateRootException(e);
         }
     }
+
+    @Override
+    public void save(Client client) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
 }

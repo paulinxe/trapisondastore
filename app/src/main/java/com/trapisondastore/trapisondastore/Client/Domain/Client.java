@@ -48,6 +48,10 @@ public final class Client extends AggregateRoot {
         return address;
     }
 
+    public ClientPassword password() {
+        return password;
+    }
+
     public static Client fromPersistence(String id, String name, String email, String address) throws InvalidClientIdException, InvalidClientNameException, InvalidClientEmailException {
         return new Client(
             new ClientId(id),

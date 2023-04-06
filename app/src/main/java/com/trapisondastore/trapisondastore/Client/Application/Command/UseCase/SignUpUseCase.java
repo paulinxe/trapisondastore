@@ -22,18 +22,24 @@ public class SignUpUseCase {
     public void execute(SignUpCommand command) throws UnableToSignUpException {
         try {
             Optional<Client> existingClient = repository.findByEmail(
-                new ClientEmail(command.email)
-            );
+                    new ClientEmail(command.email));
 
             if (existingClient.isPresent()) {
                 throw UnableToSignUpException.clientAlreadyExists();
             }
-
-        } catch (InvalidClientEmailException e) {
+        } catch (UnableToBuildAggregateRootException | InvalidClientEmailException e) {
             throw UnableToSignUpException.clientAlreadyExists();
-        } catch (UnableToBuildAggregateRootException e) {
-            // TODO: this exception should be map to a 500 error and log it somewhere
-            e.printStackTrace();
+        }
+
+        try {
+            Client client = Client.signUp(command.id, command.email, command.password);
+            repository.save(client);
+        } catch (InvalidClientEmailException e) {
+            throw UnableToSignUpException.emailNotValid();
+        } catch (InvalidClientPasswordException e) {
+            throw UnableToSignUpException.passwordNotValid();
+        } catch (InvalidClientIdException e) {
+            throw UnableToSignUpException.idNotValid();
         }
     }
 }

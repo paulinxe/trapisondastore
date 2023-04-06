@@ -7,4 +7,5 @@ import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exc
 
 public interface ClientRepository {
     public Optional<Client> findByEmail(ClientEmail email) throws UnableToBuildAggregateRootException;
+    public void save(Client client);
 }
