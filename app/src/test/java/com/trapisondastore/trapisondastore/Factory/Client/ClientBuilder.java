@@ -16,7 +16,7 @@ public final class ClientBuilder {
     public ClientBuilder(String id, String email, String password) throws InvalidClientEmailException, InvalidClientIdException, InvalidClientPasswordException {
         this.id = new ClientId(id);
         this.email = new ClientEmail(email);
-        this.password = new ClientPassword(password);
+        this.password = ClientPassword.fromPlain(password);
     }
 
     public static Client defaultClient() throws InvalidClientEmailException, InvalidClientIdException, InvalidClientPasswordException {

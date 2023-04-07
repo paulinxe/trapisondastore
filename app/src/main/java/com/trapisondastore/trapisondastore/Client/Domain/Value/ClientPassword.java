@@ -4,17 +4,29 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 
 public final class ClientPassword {
     private String password;
-    private final String REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$";
+    private final static String REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$";
 
-    public ClientPassword(String password) throws InvalidClientPasswordException {
-        if (password == null || !password.matches(REGEX)) {
-            throw new InvalidClientPasswordException();
-        }
-
+    private ClientPassword(String password) {
         this.password = password;
     }
 
     public String value() {
         return password;
+    }
+
+    public static ClientPassword fromPlain(String plain) throws InvalidClientPasswordException {
+        if (plain == null || !plain.matches(REGEX)) {
+            throw new InvalidClientPasswordException();
+        }
+
+        return new ClientPassword(plain);
+    }
+
+    public static ClientPassword fromEncrypted(String encrypted) throws InvalidClientPasswordException {
+        if (encrypted == null) {
+            throw new InvalidClientPasswordException();
+        }
+        
+        return new ClientPassword(encrypted);
     }
 }

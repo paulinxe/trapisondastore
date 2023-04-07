@@ -8,16 +8,21 @@ import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpComm
 import com.trapisondastore.trapisondastore.Client.Application.Exception.UnableToSignUpException;
 import com.trapisondastore.trapisondastore.Client.Domain.Client;
 import com.trapisondastore.trapisondastore.Client.Domain.ClientRepository;
+import com.trapisondastore.trapisondastore.Client.Domain.PasswordEncryptor;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientPasswordException;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
+import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientPassword;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
 
 public class SignUpUseCase {
 
     @Autowired
     private ClientRepository repository;
+
+    @Autowired
+    private PasswordEncryptor passwordEncryptor;
 
     public void execute(SignUpCommand command) throws UnableToSignUpException {
         try {
@@ -30,11 +35,14 @@ public class SignUpUseCase {
         } catch (UnableToBuildAggregateRootException e) {
             throw UnableToSignUpException.clientAlreadyExists();
         } catch (InvalidClientEmailException e) {
-            throw UnableToSignUpException.emailNotValid();            
+            throw UnableToSignUpException.emailNotValid();
         }
 
         try {
-            Client client = Client.signUp(command.id, command.email, command.password);
+            ClientPassword password = ClientPassword.fromPlain(command.password);
+
+            Client client = Client.signUp(command.id, command.email, passwordEncryptor.encrypt(password.value()));
+
             repository.save(client);
         } catch (InvalidClientEmailException e) {
             throw UnableToSignUpException.emailNotValid();

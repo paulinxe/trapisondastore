@@ -52,18 +52,23 @@ public final class Client extends AggregateRoot {
         return password;
     }
 
-    public static Client fromPersistence(String id, String name, String email, String address) throws InvalidClientIdException, InvalidClientNameException, InvalidClientEmailException {
+    public void updatePassword(String password) throws InvalidClientPasswordException {
+        this.password = ClientPassword.fromEncrypted(password);
+        // @TODO: publish domain event.
+    }
+
+    public static Client fromPersistence(String id, String name, String email, String address)
+            throws InvalidClientIdException, InvalidClientNameException, InvalidClientEmailException {
         return new Client(
-            new ClientId(id),
-            new ClientName(name),
-            new ClientEmail(email),
-            new ClientAddress(address)
-        );
+                new ClientId(id),
+                new ClientName(name),
+                new ClientEmail(email),
+                new ClientAddress(address));
     }
 
     public static Client signUp(String id, String email, String password)
             throws InvalidClientIdException, InvalidClientEmailException, InvalidClientPasswordException {
-        Client client = new Client(new ClientId(id), new ClientEmail(email), new ClientPassword(password));
+        Client client = new Client(new ClientId(id), new ClientEmail(email), ClientPassword.fromEncrypted(password));
 
         client.registerEvent(new ClientSignedUp(client.id().value().toString(), client.email().value()));
 

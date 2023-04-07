@@ -15,7 +15,7 @@ public class ClientPasswordTest {
         String password = "";
 
         assertThrows(InvalidClientPasswordException.class, () -> {
-            new ClientPassword(password);
+            ClientPassword.fromPlain(password);
         });
     }
 
@@ -24,7 +24,7 @@ public class ClientPasswordTest {
         String password = null;
 
         assertThrows(InvalidClientPasswordException.class, () -> {
-            new ClientPassword(password);
+            ClientPassword.fromPlain(password);
         });
     }
 
@@ -33,7 +33,7 @@ public class ClientPasswordTest {
         String password = "supersecure";
 
         assertThrows(InvalidClientPasswordException.class, () -> {
-            new ClientPassword(password);
+            ClientPassword.fromPlain(password);
         });
     }
 
@@ -42,7 +42,7 @@ public class ClientPasswordTest {
         String password = "13371337";
 
         assertThrows(InvalidClientPasswordException.class, () -> {
-            new ClientPassword(password);
+            ClientPassword.fromPlain(password);
         });
     }
 
@@ -51,7 +51,7 @@ public class ClientPasswordTest {
         String password = "aBcd12";
 
         assertThrows(InvalidClientPasswordException.class, () -> {
-            new ClientPassword(password);
+            ClientPassword.fromPlain(password);
         });
     }
 
@@ -60,7 +60,16 @@ public class ClientPasswordTest {
         String password = "aBcdEfgKw";
 
         assertThrows(InvalidClientPasswordException.class, () -> {
-            new ClientPassword(password);
+            ClientPassword.fromPlain(password);
+        });
+    }
+
+    @Test
+    void exception_is_thrown_when_encrypted_password_is_null() {
+        final String encrypted = null;
+
+        assertThrows(InvalidClientPasswordException.class, () -> {
+            ClientPassword.fromEncrypted(encrypted);
         });
     }
 
@@ -68,7 +77,7 @@ public class ClientPasswordTest {
     void password_is_set_when_valid() throws InvalidClientPasswordException {
         String expected = "SuperSecure69";
 
-        ClientPassword password = new ClientPassword(expected);
+        ClientPassword password = ClientPassword.fromPlain(expected);
 
         assertEquals(expected, password.value());
     }

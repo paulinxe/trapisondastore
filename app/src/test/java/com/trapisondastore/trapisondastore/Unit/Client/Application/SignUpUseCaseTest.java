@@ -21,6 +21,7 @@ import com.trapisondastore.trapisondastore.Client.Application.Command.UseCase.Si
 import com.trapisondastore.trapisondastore.Client.Application.Exception.UnableToSignUpException;
 import com.trapisondastore.trapisondastore.Client.Domain.Client;
 import com.trapisondastore.trapisondastore.Client.Domain.ClientRepository;
+import com.trapisondastore.trapisondastore.Client.Domain.PasswordEncryptor;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientPasswordException;
@@ -36,8 +37,12 @@ final class SignUpUseCaseTest {
     @Mock
     private ClientRepository repository;
 
+    @Mock
+    private PasswordEncryptor passwordEncryptor;
+
     public void setup() {
         repository = Mockito.mock(ClientRepository.class);
+        passwordEncryptor = Mockito.mock(PasswordEncryptor.class);
     }
 
     @Test
@@ -95,9 +100,12 @@ final class SignUpUseCaseTest {
     @MethodSource("validClientData")
     void repository_is_called_when_client_data_is_valid(String id, String email, String password)
             throws UnableToSignUpException {
+        Mockito.when(passwordEncryptor.encrypt(any(String.class))).thenReturn("asdsada");
+
         executeUseCase(id, email, password);
 
         verify(repository, times(1)).save(any(Client.class));
+        verify(passwordEncryptor, times(1)).encrypt(any(String.class));
     }
 
     private void executeUseCase(String id, String email, String password) throws UnableToSignUpException {
