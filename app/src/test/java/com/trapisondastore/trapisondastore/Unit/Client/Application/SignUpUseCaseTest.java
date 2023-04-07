@@ -3,6 +3,8 @@ package com.trapisondastore.trapisondastore.Unit.Client.Application;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.Optional;
 
@@ -87,6 +89,15 @@ final class SignUpUseCaseTest {
         });
 
         assertEquals(UnableToSignUpException.PASSWORD_NOT_VALID, exception.ERROR_CODE);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validClientData")
+    void repository_is_called_when_client_data_is_valid(String id, String email, String password)
+            throws UnableToSignUpException {
+        executeUseCase(id, email, password);
+
+        verify(repository, times(1)).save(any(Client.class));
     }
 
     private void executeUseCase(String id, String email, String password) throws UnableToSignUpException {
