@@ -3,8 +3,11 @@ package com.trapisondastore.trapisondastore.Client.Infrastructure;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.stereotype.Service;
+
 import com.trapisondastore.trapisondastore.Client.Domain.PasswordEncryptor;
 
+@Service
 public class Sha256PasswordEncryptor implements PasswordEncryptor {
 
     @Override

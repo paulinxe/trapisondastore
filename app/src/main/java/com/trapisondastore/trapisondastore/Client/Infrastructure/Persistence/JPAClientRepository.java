@@ -2,6 +2,9 @@ package com.trapisondastore.trapisondastore.Client.Infrastructure.Persistence;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.trapisondastore.trapisondastore.Client.Domain.Client;
 import com.trapisondastore.trapisondastore.Client.Domain.ClientRepository;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
@@ -10,7 +13,10 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
 
+@Service
 public class JPAClientRepository implements ClientRepository {
+    
+    @Autowired
     private JPAClientRepositoryDefinition jpaRepository;
 
     @Override

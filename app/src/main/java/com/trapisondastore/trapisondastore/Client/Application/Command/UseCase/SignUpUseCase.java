@@ -3,6 +3,7 @@ package com.trapisondastore.trapisondastore.Client.Application.Command.UseCase;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpCommand;
 import com.trapisondastore.trapisondastore.Client.Application.Exception.UnableToSignUpException;
@@ -16,6 +17,7 @@ import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientPassword;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
 
+@Service
 public class SignUpUseCase {
 
     @Autowired

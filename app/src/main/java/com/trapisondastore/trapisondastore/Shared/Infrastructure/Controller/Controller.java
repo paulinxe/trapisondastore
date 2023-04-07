@@ -26,6 +26,6 @@ public abstract class Controller {
             return Optional.of(new ResponseEntity<ObjectNode>(objectNode, HttpStatus.BAD_REQUEST));
         }
 
-        return null;
+        return Optional.empty();
     }
 }
