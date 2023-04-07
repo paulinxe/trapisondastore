@@ -27,8 +27,10 @@ public class SignUpUseCase {
             if (existingClient.isPresent()) {
                 throw UnableToSignUpException.clientAlreadyExists();
             }
-        } catch (UnableToBuildAggregateRootException | InvalidClientEmailException e) {
+        } catch (UnableToBuildAggregateRootException e) {
             throw UnableToSignUpException.clientAlreadyExists();
+        } catch (InvalidClientEmailException e) {
+            throw UnableToSignUpException.emailNotValid();            
         }
 
         try {

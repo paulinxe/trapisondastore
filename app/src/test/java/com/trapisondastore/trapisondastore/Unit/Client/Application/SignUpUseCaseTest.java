@@ -2,13 +2,14 @@ package com.trapisondastore.trapisondastore.Unit.Client.Application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -52,23 +53,50 @@ final class SignUpUseCaseTest {
         assertEquals(UnableToSignUpException.CLIENT_EXISTS, exception.ERROR_CODE);
     }
 
-    @Test
-    void exception_is_thrown_when_email_is_invalid() {
+    @ParameterizedTest
+    @MethodSource("validClientData")
+    void exception_is_thrown_when_email_is_invalid(String id, String email, String password) {
+        final String invalidEmail = "abc";
 
+        var exception = assertThrows(UnableToSignUpException.class, () -> {
+            executeUseCase(id, invalidEmail, password);
+        });
+
+        assertEquals(UnableToSignUpException.EMAIL_NOT_VALID, exception.ERROR_CODE);
     }
 
-    @Test
-    void exception_is_thrown_when_id_is_invalid() {
+    @ParameterizedTest
+    @MethodSource("validClientData")
+    void exception_is_thrown_when_id_is_invalid(String id, String email, String password) {
+        final String invalidId = "68f5-4691-9e9e-0af0e90ebf7a";
 
+        var exception = assertThrows(UnableToSignUpException.class, () -> {
+            executeUseCase(invalidId, email, password);
+        });
+
+        assertEquals(UnableToSignUpException.ID_NOT_VALID, exception.ERROR_CODE);
     }
 
-    @Test
-    void exception_is_thrown_when_password_is_invalid() {
+    @ParameterizedTest
+    @MethodSource("validClientData")
+    void exception_is_thrown_when_password_is_invalid(String id, String email, String password) {
+        final String invalidPassword = "123";
 
+        var exception = assertThrows(UnableToSignUpException.class, () -> {
+            executeUseCase(id, email, invalidPassword);
+        });
+
+        assertEquals(UnableToSignUpException.PASSWORD_NOT_VALID, exception.ERROR_CODE);
     }
 
     private void executeUseCase(String id, String email, String password) throws UnableToSignUpException {
         SignUpCommand command = new SignUpCommand(id, email, password);
         useCase.execute(command);
+    }
+
+    public static Object[][] validClientData() {
+        return new Object[][] {
+                { "f1c5b5e5-68f5-4691-9e9e-0af0e90ebf7a", "abc@test.com", "abcdAbcd1" }
+        };
     }
 }
