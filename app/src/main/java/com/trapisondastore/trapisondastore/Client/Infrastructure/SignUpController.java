@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpCommand;
-import com.trapisondastore.trapisondastore.Client.Application.Command.UseCase.SignUpUseCase;
 import com.trapisondastore.trapisondastore.Client.Application.Exception.UnableToSignUpException;
+import com.trapisondastore.trapisondastore.Client.Application.UseCase.SignUpUseCase;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Controller.Controller;
 
 import jakarta.validation.Valid;
@@ -35,17 +35,35 @@ public class SignUpController extends Controller {
 
         final String clientId = UUID.randomUUID().toString();
         SignUpCommand command = new SignUpCommand(clientId, request.email, request.password);
+        ObjectNode objectNode = mapper.createObjectNode();
 
         try {
             useCase.execute(command);
         } catch (UnableToSignUpException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            String fieldName = "";
+            String errorMessage = "";
+
+            switch (e.ERROR_CODE) {
+                case UnableToSignUpException.CLIENT_EXISTS:
+                    fieldName = "email";
+                    errorMessage = "Client already exists";
+                    break;
+                case UnableToSignUpException.EMAIL_NOT_VALID:
+                    fieldName = "email";
+                    errorMessage = "Email not valid";
+                    break;
+                case UnableToSignUpException.PASSWORD_NOT_VALID:
+                    fieldName = "password";
+                    errorMessage = "Password must have 8 characters minimum, at least one number and at least one letter";
+                    break;
+            }
+
+            objectNode.put(fieldName, errorMessage);
+
+            return new ResponseEntity<ObjectNode>(objectNode, HttpStatus.BAD_REQUEST);
         }
 
-        ObjectNode objectNode = mapper.createObjectNode();
-        objectNode.put("id", 3);
-        objectNode.put("name", "test");
+        objectNode.put("id", clientId);
 
         return new ResponseEntity<ObjectNode>(objectNode, HttpStatus.CREATED);
     }

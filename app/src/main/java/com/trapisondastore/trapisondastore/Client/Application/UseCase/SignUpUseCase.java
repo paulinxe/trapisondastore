@@ -1,4 +1,4 @@
-package com.trapisondastore.trapisondastore.Client.Application.Command.UseCase;
+package com.trapisondastore.trapisondastore.Client.Application.UseCase;
 
 import java.util.Optional;
 

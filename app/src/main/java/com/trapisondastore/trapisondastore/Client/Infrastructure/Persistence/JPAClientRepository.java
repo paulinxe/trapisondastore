@@ -9,7 +9,6 @@ import com.trapisondastore.trapisondastore.Client.Domain.Client;
 import com.trapisondastore.trapisondastore.Client.Domain.ClientRepository;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
-import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientNameException;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
 
@@ -23,26 +22,27 @@ public class JPAClientRepository implements ClientRepository {
     public Optional<Client> findByEmail(ClientEmail email) throws UnableToBuildAggregateRootException {
         var client = jpaRepository.findFirstByEmail(email.value());
         if (client == null) {
-            return Optional.of(null);
+            return Optional.empty();
         }
 
         try {
             return Optional.of(
                 Client.fromPersistence(
-                    client.getId(),
+                    client.getId().toString(),
                     client.getName(),
                     client.getEmail(),
                     client.getAddress()
                 )
             );
-        } catch (InvalidClientIdException | InvalidClientNameException | InvalidClientEmailException e) {
+        } catch (InvalidClientIdException | InvalidClientEmailException e) {
             throw new UnableToBuildAggregateRootException(e);
         }
     }
 
     @Override
     public void save(Client client) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        JPAClient jpaClient = new JPAClient(client);
+
+        jpaRepository.save(jpaClient);
     }
 }

@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `clients` (
+       id BINARY(16) NOT NULL PRIMARY KEY,
+       name VARCHAR(255),
+       email VARCHAR(255) NOT NULL UNIQUE,
+       password VARCHAR(255) NOT NULL,
+       address VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

@@ -19,6 +19,8 @@ dependencies {
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.0.5'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.5'
+	implementation 'org.flywaydb:flyway-core:9.16.3'
+	implementation 'org.flywaydb:flyway-mysql:9.16.3'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
