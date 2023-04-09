@@ -50,18 +50,8 @@ public class JPAClientRepository extends MySQLRepository implements ClientReposi
     @Transactional
     @Override
     public void save(Client client) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        
-        try {
-            JPAClient jpaClient = new JPAClient(client);
-            em.persist(jpaClient);
-            registerDomainEvents(client);
-        } catch (Exception e) {
-            tx.rollback();
-        } finally {
-            em.close();
-        }
+        JPAClient jpaClient = new JPAClient(client);
+        jpaRepository.save(jpaClient);
+        registerDomainEvents(client);
     }
 }
