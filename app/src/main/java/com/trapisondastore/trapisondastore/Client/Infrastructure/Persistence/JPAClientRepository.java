@@ -10,13 +10,21 @@ import com.trapisondastore.trapisondastore.Client.Domain.ClientRepository;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
+import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.MySQLRepository;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.transaction.Transactional;
 
 @Service
-public class JPAClientRepository implements ClientRepository {
+public class JPAClientRepository extends MySQLRepository implements ClientRepository {
     
     @Autowired
     private JPAClientRepositoryDefinition jpaRepository;
+
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     @Override
     public Optional<Client> findByEmail(ClientEmail email) throws UnableToBuildAggregateRootException {
@@ -39,10 +47,21 @@ public class JPAClientRepository implements ClientRepository {
         }
     }
 
+    @Transactional
     @Override
     public void save(Client client) {
-        JPAClient jpaClient = new JPAClient(client);
-
-        jpaRepository.save(jpaClient);
+        EntityManager em = entityManagerFactory.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        
+        try {
+            JPAClient jpaClient = new JPAClient(client);
+            em.persist(jpaClient);
+            registerDomainEvents(client);
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
     }
 }
