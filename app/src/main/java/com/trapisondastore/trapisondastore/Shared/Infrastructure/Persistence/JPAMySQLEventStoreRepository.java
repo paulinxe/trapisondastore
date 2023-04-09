@@ -27,7 +27,7 @@ public class JPAMySQLEventStoreRepository implements EventStoreRepository {
                 event.isProcessed(),
                 event.getTries(),
                 event.getCreatedAt(),
-                event.getProcessedAt()
+                event.getProcessedAt().get()
             );
 
             jpaRepository.save(jpaEvent);

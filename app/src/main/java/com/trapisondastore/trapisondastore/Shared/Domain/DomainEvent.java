@@ -3,6 +3,7 @@ package com.trapisondastore.trapisondastore.Shared.Domain;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class DomainEvent {
@@ -11,7 +12,7 @@ public abstract class DomainEvent {
     private boolean processed;
     private int tries;
     private Instant createdAt;
-    private Instant processedAt;
+    private Optional<Instant> processedAt;
 
     public DomainEvent(
         HashMap<String, Object> eventAttributes,
@@ -21,7 +22,7 @@ public abstract class DomainEvent {
         this.processed = false;
         this.tries = 0;
         this.createdAt = Instant.now();
-        this.processedAt = null;
+        this.processedAt = Optional.empty();
 
         DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
         var data = new HashMap<String, Object>(){{
@@ -53,7 +54,7 @@ public abstract class DomainEvent {
         return createdAt;
     }
 
-    public Instant getProcessedAt() {
+    public Optional<Instant> getProcessedAt() {
         return processedAt;
     }
 }
