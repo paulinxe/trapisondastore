@@ -12,9 +12,6 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.MySQLRepository;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -22,9 +19,6 @@ public class JPAClientRepository extends MySQLRepository implements ClientReposi
     
     @Autowired
     private JPAClientRepositoryDefinition jpaRepository;
-
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
 
     @Override
     public Optional<Client> findByEmail(ClientEmail email) throws UnableToBuildAggregateRootException {
