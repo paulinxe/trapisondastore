@@ -1,19 +1,19 @@
 package com.trapisondastore.trapisondastore.Client.Domain.Value;
 
-import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientNameException;
+import java.util.Optional;
 
 public final class ClientName {
-    private String name;
+    private Optional<String> name;
 
-    public ClientName(String name) throws InvalidClientNameException {
-        if (name == null || name.isBlank()) {
-            throw new InvalidClientNameException();
+    public ClientName(String name) {
+        if (name == null) {
+            this.name = Optional.empty();
+        } else {
+            this.name = Optional.of(name);
         }
-
-        this.name = name;
     }
 
-    public String value() {
+    public Optional<String> value() {
         return name;
     }
 }

@@ -6,7 +6,12 @@ public final class ClientAddress {
     private Optional<String> address;
 
     public ClientAddress(String address) {
-        this.address = Optional.of(address);
+        if (address == null) {
+            this.address = Optional.empty();
+        } else {
+            this.address = Optional.of(address);
+        }
+
     }
 
     public Optional<String> value() {
