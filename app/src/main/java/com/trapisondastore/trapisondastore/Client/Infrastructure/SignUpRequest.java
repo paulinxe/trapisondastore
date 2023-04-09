@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotEmpty;
 
 public class SignUpRequest {
     @NotEmpty
-    public String name;
-
-    @NotEmpty
     public String email;
 
     @NotEmpty

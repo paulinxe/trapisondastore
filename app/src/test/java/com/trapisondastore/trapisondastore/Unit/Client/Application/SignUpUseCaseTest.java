@@ -115,7 +115,7 @@ final class SignUpUseCaseTest {
 
     public static Object[][] validClientData() {
         return new Object[][] {
-                { "f1c5b5e5-68f5-4691-9e9e-0af0e90ebf7a", "abc@test.com", "abcdAbcd1" }
+            { "f1c5b5e5-68f5-4691-9e9e-0af0e90ebf7a", "abc@test.com", "abcdAbcd1" }
         };
     }
 }

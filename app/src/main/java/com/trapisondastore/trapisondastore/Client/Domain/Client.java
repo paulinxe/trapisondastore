@@ -18,7 +18,13 @@ public final class Client extends AggregateRoot {
     private ClientAddress address;
     private ClientPassword password;
 
-    public Client(ClientId id, ClientName name, ClientEmail email, ClientPassword password, ClientAddress address) {
+    public Client(
+        ClientId id,
+        ClientName name,
+        ClientEmail email,
+        ClientPassword password,
+        ClientAddress address
+    ) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -51,8 +57,12 @@ public final class Client extends AggregateRoot {
         // @TODO: publish domain event.
     }
 
-    public static Client fromPersistence(String id, String name, String email, String address)
-            throws InvalidClientIdException, InvalidClientEmailException {
+    public static Client fromPersistence(
+        String id,
+        String name,
+        String email,
+        String address
+    ) throws InvalidClientIdException, InvalidClientEmailException {
         return new Client(
             new ClientId(id),
             new ClientName(name),
@@ -62,8 +72,11 @@ public final class Client extends AggregateRoot {
         );
     }
 
-    public static Client signUp(String id, String email, String password)
-            throws InvalidClientIdException, InvalidClientEmailException, InvalidClientPasswordException {
+    public static Client signUp(
+        String id,
+        String email,
+        String password
+    ) throws InvalidClientIdException, InvalidClientEmailException, InvalidClientPasswordException {
         Client client = new Client(
             new ClientId(id),
             new ClientName(null),
@@ -72,7 +85,12 @@ public final class Client extends AggregateRoot {
             new ClientAddress(null)
         );
 
-        client.registerEvent(new ClientSignedUp(client.id().value().toString(), client.email().value()));
+        client.registerEvent(
+            new ClientSignedUp(
+                client.id().value().toString(),
+                client.email().value()
+            )
+        );
 
         return client;
     }
