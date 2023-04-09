@@ -36,6 +36,8 @@ services:
       - MYSQL_ROOT_HOST=%
     networks:
       default:
+    ports:
+      - "33007:3306"
 
 volumes:
     mysql_data:
