@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -49,7 +48,15 @@ public class DomainEventTest {
     @Test
     void event_payload_is_formed_correctly() {
         var fake = new FakeDomainEvent();
-        
+
+        assertTrue(fake.getPayload().containsKey("data"));
+
+        var data = (HashMap<String, Object>) fake.getPayload().get("data");
+
+        assertTrue(data.containsKey("id"));
+        assertTrue(data.containsKey("type"));
+        assertTrue(data.containsKey("attributes"));
+        assertTrue(data.containsKey("occurred_on"));
     }
 
     private class FakeDomainEvent extends DomainEvent {
