@@ -28,16 +28,26 @@ public class JPAClientRepositoryTest {
     private EntityManager entityManager;
 
     @Test
-    void client_and_domain_event_are_stored_when_save_is_invoked()
-            throws InvalidClientEmailException, InvalidClientIdException,
-            InvalidClientPasswordException {
+    void client_and_domain_event_are_stored_when_save_is_invoked() throws
+        InvalidClientEmailException,
+        InvalidClientIdException,
+        InvalidClientPasswordException
+    {
         Client client = ClientBuilder.defaultClient();
+        Client signUpClient = Client.signUp(
+            client.id().value().toString(),
+            client.email().value(),
+            client.password().value()
+        );
 
-        repository.save(client);
+        repository.save(signUpClient);
 
-        Query query = entityManager.createNativeQuery("SELECT COUNT(1) FROM clients c WHERE c.id = UNHEX(REPLACE(:id, \"-\", \"\"))");
+        Query query = entityManager.createNativeQuery(
+                "SELECT COUNT(1) FROM clients c WHERE c.id = UNHEX(REPLACE(:id, \"-\", \"\"))");
         query.setParameter("id", client.id().value().toString());
+        assertEquals(1L, query.getSingleResult());
 
+        query = entityManager.createNativeQuery("SELECT COUNT(1) FROM event_store e");
         assertEquals(1L, query.getSingleResult());
     }
 }

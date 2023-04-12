@@ -6,12 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trapisondastore.trapisondastore.Shared.Domain.DomainEvent;
 import com.trapisondastore.trapisondastore.Shared.Domain.EventStoreRepository;
+import jakarta.persistence.EntityManager;
 
 @Service
 public class JPAMySQLEventStoreRepository implements EventStoreRepository {
 
     @Autowired
-    private JPAEventStoreRepository jpaRepository;
+    private EntityManager entityManager;
 
     @Override
     public void save(DomainEvent event) {
@@ -27,10 +28,10 @@ public class JPAMySQLEventStoreRepository implements EventStoreRepository {
                 event.isProcessed(),
                 event.getTries(),
                 event.getCreatedAt(),
-                event.getProcessedAt().get()
+                event.getProcessedAt().isPresent() ? event.getProcessedAt().get() : null
             );
 
-            jpaRepository.save(jpaEvent);
+            entityManager.persist(jpaEvent);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

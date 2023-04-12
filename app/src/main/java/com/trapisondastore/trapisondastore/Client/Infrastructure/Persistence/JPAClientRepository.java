@@ -52,8 +52,6 @@ public class JPAClientRepository extends MySQLRepository implements ClientReposi
     public void save(Client client) {
         JPAClient jpaClient = new JPAClient(client);
         entityManager.persist(jpaClient);
-        // jpaRepository.save(jpaClient);
-        // jpaRepository.flush();
         registerDomainEvents(client);
     }
 }
