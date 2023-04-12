@@ -20,6 +20,10 @@ services:
       DATABASE_USER: "trapisondastore"
       DATABASE_PASSWORD: "secret"
       DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver"
+      TEST_DATABASE_URL: "jdbc:mysql://mysql:3306/test_trapisondastore"
+      TEST_DATABASE_USER: "trapisondastore"
+      TEST_DATABASE_PASSWORD: "secret"
+      TEST_DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver"
     networks:
       default:
 

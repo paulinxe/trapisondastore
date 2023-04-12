@@ -3,6 +3,7 @@ package com.trapisondastore.trapisondastore.Client.Infrastructure.Persistence;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.trapisondastore.trapisondastore.Client.Domain.Client;
@@ -15,6 +16,7 @@ import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exc
 import jakarta.transaction.Transactional;
 
 @Service
+@Repository
 public class JPAClientRepository extends MySQLRepository implements ClientRepository {
     
     @Autowired

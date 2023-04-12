@@ -3,6 +3,8 @@ package com.trapisondastore.trapisondastore.Integration.Client.Infrastructure.Pe
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import com.trapisondastore.trapisondastore.Client.Domain.Client;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientEmailException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
@@ -10,20 +12,22 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 import com.trapisondastore.trapisondastore.Client.Infrastructure.Persistence.JPAClientRepository;
 import com.trapisondastore.trapisondastore.Factory.Client.ClientBuilder;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 
+@SpringBootTest
+@Transactional
+@ActiveProfiles("test")
 public class JPAClientRepositoryTest {
 
     @Autowired
     private JPAClientRepository repository;
 
     @PersistenceContext
-    private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
 
     @Test
-    // Transaction per test
     void client_and_domain_event_are_stored_when_save_is_invoked()
             throws InvalidClientEmailException, InvalidClientIdException,
             InvalidClientPasswordException {
@@ -31,7 +35,7 @@ public class JPAClientRepositoryTest {
 
         repository.save(client);
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        // EntityManager entityManager = entityManagerFactory.createEntityManager();
         Query query = entityManager.createQuery("SELECT COUNT(1) FROM clients c WHERE c.id = :id");
         query.setParameter("id", client.id().value());
 

@@ -1,7 +1,7 @@
 package com.trapisondastore.trapisondastore;
 
 import javax.sql.DataSource;
-
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("!test")
-public class DatabaseConfig extends DataSourceProperties {
-
+@EnableAutoConfiguration
+@Profile("test")
+public class TestDatabaseConfig extends DataSourceProperties {
     @Bean
     public DataSource getDataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
