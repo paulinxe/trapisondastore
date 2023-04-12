@@ -35,10 +35,9 @@ public class JPAClientRepositoryTest {
 
         repository.save(client);
 
-        // EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Query query = entityManager.createQuery("SELECT COUNT(1) FROM clients c WHERE c.id = :id");
-        query.setParameter("id", client.id().value());
+        Query query = entityManager.createNativeQuery("SELECT COUNT(1) FROM clients c WHERE c.id = UNHEX(REPLACE(:id, \"-\", \"\"))");
+        query.setParameter("id", client.id().value().toString());
 
-        assertEquals(1, query.getFirstResult());
+        assertEquals(1L, query.getSingleResult());
     }
 }

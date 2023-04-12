@@ -22,6 +22,7 @@ public final class ClientBuilder {
         this.email = new ClientEmail(email);
         this.password = ClientPassword.fromPlain(password);
         this.address = new ClientAddress(null);
+        this.name = new ClientName(name);
     }
 
     public static Client defaultClient() throws InvalidClientEmailException, InvalidClientIdException, InvalidClientPasswordException {
