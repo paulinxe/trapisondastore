@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.trapisondastore.trapisondastore.Client.Domain.Client" table="clients">
+        <composite-id name="id" class="com.trapisondastore.trapisondastore.Client.Domain.Value.ClientId" access="field">
+            <key-property name="value" column="id" length="16" access="field" type="uuid-binary" />
+        </composite-id>
+
+        <component name="name" class="com.trapisondastore.trapisondastore.Client.Domain.Value.ClientName" access="field">
+            <property name="value" column="name" type="string" access="field" />
+        </component>
+
+        <component name="email" class="com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail" access="field">
+            <property name="value" column="email" type="string" access="field" />
+        </component>
+
+        <component name="password" class="com.trapisondastore.trapisondastore.Client.Domain.Value.ClientPassword" access="field">
+            <property name="value" column="password" type="string" access="field" />
+        </component>
+
+        <component name="address" class="com.trapisondastore.trapisondastore.Client.Domain.Value.ClientAddress" access="field">
+            <property name="value" column="address" type="string" access="field" />
+        </component>
+    </class>
+</hibernate-mapping>
