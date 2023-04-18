@@ -3,15 +3,20 @@ package com.trapisondastore.trapisondastore.Client.Domain.Value;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientPasswordException;
 
 public final class ClientPassword {
-    private String password;
+    private String value;
     private final static String REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$";
 
     private ClientPassword(String password) {
-        this.password = password;
+        this.value = password;
+    }
+
+    // Hibernate crap
+    public ClientPassword() {
+        
     }
 
     public String value() {
-        return password;
+        return value;
     }
 
     public static ClientPassword fromPlain(String plain) throws InvalidClientPasswordException {

@@ -2,7 +2,6 @@ package com.trapisondastore.trapisondastore.Client.Application.UseCase;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpCommand;
@@ -15,15 +14,10 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientPasswordException;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientEmail;
 import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientPassword;
-import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
 
 @Service
 public class SignUpUseCase {
-
-    @Autowired
     private ClientRepository repository;
-
-    @Autowired
     private PasswordEncryptor passwordEncryptor;
 
     public void execute(SignUpCommand command) throws UnableToSignUpException {
@@ -34,8 +28,6 @@ public class SignUpUseCase {
             if (existingClient.isPresent()) {
                 throw UnableToSignUpException.clientAlreadyExists();
             }
-        } catch (UnableToBuildAggregateRootException e) {
-            throw UnableToSignUpException.clientAlreadyExists();
         } catch (InvalidClientEmailException e) {
             throw UnableToSignUpException.emailNotValid();
         }

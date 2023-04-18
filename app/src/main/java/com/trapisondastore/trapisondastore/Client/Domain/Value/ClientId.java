@@ -5,7 +5,11 @@ import java.util.UUID;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
 
 public final class ClientId {
-    private UUID id;
+    private String value;
+
+    public ClientId() {
+
+    }
 
     public ClientId(String id) throws InvalidClientIdException {
         try {
@@ -13,13 +17,13 @@ public final class ClientId {
                 throw new InvalidClientIdException();
             }
             
-            this.id = UUID.fromString(id);
+            this.value = UUID.fromString(id).toString();
         } catch (IllegalArgumentException e) {
             throw new InvalidClientIdException();
         }
     }
 
-    public UUID value() {
-        return id;
+    public String value() {
+        return value;
     }
 }

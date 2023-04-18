@@ -3,17 +3,17 @@ package com.trapisondastore.trapisondastore.Client.Domain.Value;
 import java.util.Optional;
 
 public final class ClientName {
-    private Optional<String> name;
+    private String value;
+
+    public ClientName() {
+        
+    }
 
     public ClientName(String name) {
-        if (name == null) {
-            this.name = Optional.empty();
-        } else {
-            this.name = Optional.of(name);
-        }
+        value = name;
     }
 
     public Optional<String> value() {
-        return name;
+        return Optional.ofNullable(value);
     }
 }

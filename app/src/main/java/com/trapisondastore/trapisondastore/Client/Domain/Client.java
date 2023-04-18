@@ -32,6 +32,10 @@ public final class Client extends AggregateRoot {
         this.address = address;
     }
 
+    public Client() {
+
+    }
+
     public ClientId id() {
         return id;
     }
