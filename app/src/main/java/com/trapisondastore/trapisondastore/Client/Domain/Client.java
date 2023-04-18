@@ -98,4 +98,16 @@ public final class Client extends AggregateRoot {
 
         return client;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Client client = (Client) o;
+        return id.equals(client.id);
+    }
 }

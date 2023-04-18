@@ -8,7 +8,7 @@ public final class ClientId {
     private UUID value;
 
     public ClientId() {
-        
+
     }
 
     public ClientId(String id) throws InvalidClientIdException {
@@ -25,5 +25,17 @@ public final class ClientId {
 
     public UUID value() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ClientId id = (ClientId) o;
+        return value.equals(id.value());
     }
 }
