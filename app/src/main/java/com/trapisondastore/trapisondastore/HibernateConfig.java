@@ -1,5 +1,6 @@
 package com.trapisondastore.trapisondastore;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
@@ -21,11 +22,33 @@ public class HibernateConfig extends DataSourceProperties {
     LocalSessionFactoryBean sessionFactory;
 
     public HibernateConfig() {
-        
+
     }
-    
+
+    private void setHibernateXMLFiles() {
+        File directory = new File("./src/main/java/com/trapisondastore/trapisondastore/");
+        File[] files = directory.listFiles();
+
+        for (File file : files) {
+            if (!file.isDirectory()) {
+                continue;
+            }
+
+            File persistenceDirectory = new File(
+                file.getAbsolutePath() + "/Infrastructure/Persistence"
+            );
+
+            for (File f : persistenceDirectory.listFiles()) {
+                if (f.getName().endsWith("hbm.xml")) {
+                    sessionFactory.setMappingLocations(new FileSystemResource(f.getAbsolutePath()));
+                }
+            }
+        }
+
+    }
+
     @Bean
-    public LocalSessionFactoryBean sessionFactory()  {
+    public LocalSessionFactoryBean sessionFactory() {
         sessionFactory = new LocalSessionFactoryBean();
 
         // @TODO: extract to method
@@ -43,9 +66,7 @@ public class HibernateConfig extends DataSourceProperties {
         properties.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQL8Dialect"); // @TODO
         sessionFactory.setHibernateProperties(properties);
 
-        sessionFactory.setMappingLocations(
-            new FileSystemResource("./src/main/java/com/trapisondastore/trapisondastore/Client/Infrastructure/Persistence/Client.hbm.xml")
-        );
+        setHibernateXMLFiles();
 
         return sessionFactory;
     }
