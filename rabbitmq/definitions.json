@@ -1,0 +1,66 @@
+{
+    "rabbit_version": "3.11",
+    "rabbitmq_version": "3.11",
+    "product_name": "RabbitMQ",
+    "product_version": "3.11",
+    "users": [
+      {
+        "name": "trapisondastore",
+        "password": "secret",
+        "tags": "administrator"
+      }
+    ],
+    "vhosts": [
+      {
+        "name": "trapisondastore-vhost"
+      }
+    ],
+    "permissions": [
+      {
+        "user": "trapisondastore",
+        "vhost": "trapisondastore-vhost",
+        "configure": ".*",
+        "write": ".*",
+        "read": ".*"
+      }
+    ],
+    "topic_permissions": [
+  
+    ],
+    "parameters": [
+  
+    ],
+    "policies": [
+  
+    ],
+    "queues": [
+        {
+            "name": "client.client.send_email_on_client_signed_up",
+            "vhost": "trapisondastore-vhost",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {}
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "client",
+            "vhost": "trapisondastore-vhost",
+            "type": "topic",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [
+      {
+        "source": "client",
+        "vhost": "trapisondastore-vhost",
+        "destination": "client.client.send_email_on_client_signed_up",
+        "destination_type": "queue",
+        "routing_key": "trapisondastore.client.1.event.client.signed_up",
+        "arguments": {}
+      }
+    ]
+  }

@@ -28,7 +28,10 @@ services:
       default:
 
   rabbit:
-    image: rabbitmq:3.11.11-alpine
+    build:
+      context: ./rabbitmq
+    ports:
+      - "15672:15672"
 
   mysql:
     image: mysql:8
