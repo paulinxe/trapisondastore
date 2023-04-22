@@ -1,0 +1,17 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.trapisondastore.trapisondastore.Shared.Domain.DomainEvent" table="event_store">
+        <id name="id" column="id" length="16" access="field" generator="uuid" />
+        <property name="payload" column="payload" type="string" access="field" />
+        <property name="tries" column="tries" type="integer" access="field" />
+        <property name="createdAt" column="created_at" type="timestamp" access="field" />
+        <property name="processedAt" column="processed_at" type="timestamp" access="field" />
+
+        <discriminator column="fqn" type="string" access="field"/>
+        <subclass name="com.trapisondastore.trapisondastore.Client.Domain.Event.ClientSignedUp" />
+    </class>
+</hibernate-mapping>

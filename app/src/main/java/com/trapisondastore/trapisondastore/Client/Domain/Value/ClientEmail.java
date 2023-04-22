@@ -7,7 +7,11 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 
 public final class ClientEmail {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
-    private String email;
+    private String value;
+
+    public ClientEmail() {
+        
+    }
 
     public ClientEmail(String email) throws InvalidClientEmailException {
         if (email == null) {
@@ -20,10 +24,10 @@ public final class ClientEmail {
             throw new InvalidClientEmailException();
         }
 
-        this.email = email;
+        this.value = email;
     }
 
     public String value() {
-        return email;
+        return value;
     }
 }
