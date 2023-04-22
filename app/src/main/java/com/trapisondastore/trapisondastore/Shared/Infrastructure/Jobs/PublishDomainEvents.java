@@ -49,7 +49,9 @@ public class PublishDomainEvents {
             for (var event : events) {
                 var payload = event.getPayload();
 
-                HashMap<String, Object> json = new ObjectMapper().readValue(payload, HashMap.class);
+                HashMap<String, Object> json = new ObjectMapper().readValue(
+                    payload, HashMap.class
+                );
 
                 var data = ((HashMap<String, Object>) json.get("data"));
 
@@ -61,6 +63,10 @@ public class PublishDomainEvents {
                     null,
                     events.get(0).getPayload().getBytes()
                 );
+
+                event.setProcessed();
+
+                repository.save(event);
             }
         }
     }

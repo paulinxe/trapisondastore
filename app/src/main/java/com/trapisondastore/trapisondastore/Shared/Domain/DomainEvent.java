@@ -65,4 +65,8 @@ public abstract class DomainEvent {
     public Optional<Instant> getProcessedAt() {
         return Optional.ofNullable(processedAt != null ? processedAt.toInstant() : null);
     }
+
+    public void setProcessed() {
+        this.processedAt = Timestamp.from(Instant.now());
+    }
 }

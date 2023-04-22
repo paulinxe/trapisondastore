@@ -25,6 +25,11 @@ public abstract class HibernateRepository <T> {
 
         sessionFactory.getCurrentSession().flush();
     }
+
+    protected void persist(DomainEvent event) {
+        sessionFactory.getCurrentSession().merge(event);
+        sessionFactory.getCurrentSession().flush();
+    }
     
     protected <V> Optional<T> byId(V id) {
         return Optional.ofNullable(sessionFactory.getCurrentSession().byId(aggregateClass).load(id));

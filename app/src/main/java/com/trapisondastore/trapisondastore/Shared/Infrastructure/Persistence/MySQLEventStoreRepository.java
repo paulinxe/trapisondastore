@@ -22,4 +22,8 @@ public class MySQLEventStoreRepository extends HibernateRepository<DomainEvent> 
             .stream()
             .toList();
     }
+
+    public void save(DomainEvent event) {
+        persist(event);
+    }
 }
