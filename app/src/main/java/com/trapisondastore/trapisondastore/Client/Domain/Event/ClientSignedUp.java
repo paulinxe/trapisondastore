@@ -4,6 +4,10 @@ import java.util.HashMap;
 import com.trapisondastore.trapisondastore.Shared.Domain.DomainEvent;
 
 public class ClientSignedUp extends DomainEvent {
+    public ClientSignedUp() {
+
+    }
+    
     public ClientSignedUp(String id, String email) {
         super(
             new HashMap<String, Object>() {{

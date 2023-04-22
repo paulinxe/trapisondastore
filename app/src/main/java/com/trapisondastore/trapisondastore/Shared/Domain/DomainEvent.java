@@ -11,8 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class DomainEvent {
     private UUID id;
-    private String payload; // @TODO: figure out a way to use a hashmap
-    private boolean processed;
+    private String payload;
     private int tries;
     private Timestamp createdAt;
     private Timestamp processedAt;
@@ -26,7 +25,6 @@ public abstract class DomainEvent {
         String domainEventFQN
     ) {
         this.id = UUID.randomUUID();
-        this.processed = false;
         this.tries = 0;
         this.createdAt = Timestamp.from(Instant.now());
         this.processedAt = null;
@@ -54,10 +52,6 @@ public abstract class DomainEvent {
 
     public String getPayload() {
         return payload;
-    }
-
-    public boolean isProcessed() {
-        return processed;
     }
 
     public int getTries() {

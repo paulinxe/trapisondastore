@@ -24,6 +24,10 @@ services:
       TEST_DATABASE_USER: "trapisondastore"
       TEST_DATABASE_PASSWORD: "secret"
       TEST_DATABASE_DRIVER: "com.mysql.cj.jdbc.Driver"
+      RABBIT_HOST: "rabbit"
+      RABBIT_USERNAME: "trapisondastore"
+      RABBIT_PASSWORD: "secret"
+      RABBIT_VHOST: "trapisondastore-vhost"
     networks:
       default:
 

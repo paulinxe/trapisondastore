@@ -1,7 +1,6 @@
 package com.trapisondastore.trapisondastore.Unit.Shared.Domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
@@ -23,7 +22,6 @@ public class DomainEventTest {
     void event_is_not_processed_by_default() {
         var fake = new FakeDomainEvent();
 
-        assertFalse(fake.isProcessed());
         assertTrue(fake.getProcessedAt().isEmpty());
     }
 
