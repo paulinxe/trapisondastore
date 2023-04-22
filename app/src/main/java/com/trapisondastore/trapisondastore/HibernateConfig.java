@@ -2,6 +2,8 @@ package com.trapisondastore.trapisondastore;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.cfg.AvailableSettings;
@@ -28,6 +30,7 @@ public class HibernateConfig extends DataSourceProperties {
     private void setHibernateXMLFiles() {
         File directory = new File("./src/main/java/com/trapisondastore/trapisondastore/");
         File[] files = directory.listFiles();
+        List<FileSystemResource> xmlFiles = new ArrayList<>();
 
         for (File file : files) {
             if (!file.isDirectory()) {
@@ -40,11 +43,12 @@ public class HibernateConfig extends DataSourceProperties {
 
             for (File f : persistenceDirectory.listFiles()) {
                 if (f.getName().endsWith("hbm.xml")) {
-                    sessionFactory.setMappingLocations(new FileSystemResource(f.getAbsolutePath()));
+                    xmlFiles.add(new FileSystemResource(f.getAbsolutePath()));
                 }
             }
         }
 
+        sessionFactory.setMappingLocations(xmlFiles.toArray(new FileSystemResource[0]));
     }
 
     @Bean

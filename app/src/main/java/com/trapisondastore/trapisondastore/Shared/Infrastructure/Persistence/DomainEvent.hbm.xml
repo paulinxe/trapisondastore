@@ -11,5 +11,9 @@
         <property name="tries" column="tries" type="integer" access="field" />
         <property name="createdAt" column="created_at" type="timestamp" access="field" />
         <property name="processedAt" column="processed_at" type="timestamp" access="field" />
+
+        <subclass name="com.trapisondastore.trapisondastore.Client.Domain.Event.ClientSignedUp"
+            discriminator-value="InFile">
+        </subclass>
     </class>
 </hibernate-mapping>

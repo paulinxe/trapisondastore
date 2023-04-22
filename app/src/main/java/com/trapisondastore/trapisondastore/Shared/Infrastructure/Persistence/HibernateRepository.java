@@ -15,13 +15,13 @@ public abstract class HibernateRepository <T> {
         this.aggregateClass = aggregateClass;
     }
 
-    protected void persist(T aggregateRoot) {
+    protected void persist(AggregateRoot aggregateRoot) {
         sessionFactory.getCurrentSession().persist(aggregateRoot);
         
-        /*List<DomainEvent> events = aggregateRoot.pullEvents();
+        List<DomainEvent> events = aggregateRoot.pullEvents();
         for (var event : events) {
             sessionFactory.getCurrentSession().persist(event);
-        }*/
+        }
 
         sessionFactory.getCurrentSession().flush();
     }
