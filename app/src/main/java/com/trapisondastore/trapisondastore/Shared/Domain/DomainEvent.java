@@ -12,7 +12,11 @@ public abstract class DomainEvent {
     private boolean processed;
     private int tries;
     private Instant createdAt;
-    private Optional<Instant> processedAt;
+    private Instant processedAt;
+
+    public DomainEvent() {
+
+    }
 
     public DomainEvent(
         HashMap<String, Object> eventAttributes,
@@ -22,7 +26,7 @@ public abstract class DomainEvent {
         this.processed = false;
         this.tries = 0;
         this.createdAt = Instant.now();
-        this.processedAt = Optional.empty();
+        this.processedAt = null;
 
         DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
         var data = new HashMap<String, Object>(){{
@@ -55,6 +59,6 @@ public abstract class DomainEvent {
     }
 
     public Optional<Instant> getProcessedAt() {
-        return processedAt;
+        return Optional.ofNullable(processedAt);
     }
 }

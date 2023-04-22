@@ -1,7 +1,7 @@
 package com.trapisondastore.trapisondastore.Client.Application.UseCase;
 
 import java.util.Optional;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpCommand;
@@ -17,7 +17,10 @@ import com.trapisondastore.trapisondastore.Client.Domain.Value.ClientPassword;
 
 @Service
 public class SignUpUseCase {
+    @Autowired
     private ClientRepository repository;
+
+    @Autowired
     private PasswordEncryptor passwordEncryptor;
 
     public void execute(SignUpCommand command) throws UnableToSignUpException {

@@ -20,7 +20,15 @@ public class MySQLClientRepository extends HibernateRepository<Client> implement
 
     @Override
     public Optional<Client> findByEmail(ClientEmail email) {
-        return Optional.empty();
+        String jpql = "SELECT * FROM clients WHERE email = :email";
+        var client = sessionFactory.getCurrentSession()
+                .createNativeQuery(jpql, Client.class)
+                .setParameter("email", email.value())
+                .getResultList()
+                .stream()
+                .findFirst();
+
+        return client;
     }
 
     @Override
