@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS `event_store` (
     id BINARY(16) NOT NULL PRIMARY KEY,
     payload JSON NOT NULL,
-    processed BOOLEAN NOT NULL DEFAULT 0,
+    processed BOOLEAN NOT NULL DEFAULT 0, -- @TODO: get rid of this column
     tries INT NOT NULL DEFAULT 0,
+    fqn VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     processed_at TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

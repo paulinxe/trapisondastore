@@ -1,18 +1,21 @@
 package com.trapisondastore.trapisondastore.Shared.Domain;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class DomainEvent {
     private UUID id;
-    private HashMap<String, Object> payload;
+    private String payload; // @TODO: figure out a way to use a hashmap
     private boolean processed;
     private int tries;
-    private Instant createdAt;
-    private Instant processedAt;
+    private Timestamp createdAt;
+    private Timestamp processedAt;
 
     public DomainEvent() {
 
@@ -25,24 +28,31 @@ public abstract class DomainEvent {
         this.id = UUID.randomUUID();
         this.processed = false;
         this.tries = 0;
-        this.createdAt = Instant.now();
+        this.createdAt = Timestamp.from(Instant.now());
         this.processedAt = null;
 
         DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
         var data = new HashMap<String, Object>(){{
             put("id", id.toString());
             put("type", domainEventFQN);
-            put("occurred_on", formatter.format(createdAt));
+            put("occurred_on", formatter.format(createdAt.toInstant())); // @TODO: dafuq
             put("attributes", eventAttributes);
         }};
-        this.payload = new HashMap<String, Object>(){{ put("data", data); }};
+        try { // @TODO: we shouldn't use infra here
+            this.payload = new ObjectMapper().writeValueAsString(
+                new HashMap<String, Object>(){{ put("data", data); }}
+            );
+        } catch (JsonProcessingException e) {
+            this.payload = null;
+            e.printStackTrace();
+        }
     }
 
     public UUID getId() {
         return id;
     }
 
-    public HashMap<String, Object> getPayload() {
+    public String getPayload() {
         return payload;
     }
 
@@ -55,10 +65,10 @@ public abstract class DomainEvent {
     }
 
     public Instant getCreatedAt() {
-        return createdAt;
+        return createdAt.toInstant();
     }
 
     public Optional<Instant> getProcessedAt() {
-        return Optional.ofNullable(processedAt);
+        return Optional.ofNullable(processedAt != null ? processedAt.toInstant() : null);
     }
 }

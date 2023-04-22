@@ -49,14 +49,12 @@ public class DomainEventTest {
     void event_payload_is_formed_correctly() {
         var fake = new FakeDomainEvent();
 
-        assertTrue(fake.getPayload().containsKey("data"));
+        assertTrue(fake.getPayload().contains("data"));
 
-        var data = (HashMap<String, Object>) fake.getPayload().get("data");
-
-        assertTrue(data.containsKey("id"));
-        assertTrue(data.containsKey("type"));
-        assertTrue(data.containsKey("attributes"));
-        assertTrue(data.containsKey("occurred_on"));
+        assertTrue(fake.getPayload().contains("id"));
+        assertTrue(fake.getPayload().contains("type"));
+        assertTrue(fake.getPayload().contains("attributes"));
+        assertTrue(fake.getPayload().contains("occurred_on"));
     }
 
     private class FakeDomainEvent extends DomainEvent {

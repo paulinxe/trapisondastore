@@ -6,14 +6,13 @@
 <hibernate-mapping>
     <class name="com.trapisondastore.trapisondastore.Shared.Domain.DomainEvent" table="event_store">
         <id name="id" column="id" length="16" access="field" generator="uuid" />
-        <property name="payload" column="payload" type="string" access="field" />
         <property name="processed" column="processed" type="boolean" access="field" />
+        <property name="payload" column="payload" type="string" access="field" />
         <property name="tries" column="tries" type="integer" access="field" />
         <property name="createdAt" column="created_at" type="timestamp" access="field" />
         <property name="processedAt" column="processed_at" type="timestamp" access="field" />
 
-        <subclass name="com.trapisondastore.trapisondastore.Client.Domain.Event.ClientSignedUp"
-            discriminator-value="InFile">
-        </subclass>
+        <discriminator column="fqn" type="string" access="field"/>
+        <subclass name="com.trapisondastore.trapisondastore.Client.Domain.Event.ClientSignedUp" />
     </class>
 </hibernate-mapping>
