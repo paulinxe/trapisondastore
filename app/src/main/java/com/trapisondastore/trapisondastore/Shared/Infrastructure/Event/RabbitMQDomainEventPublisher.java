@@ -1,18 +1,19 @@
-package com.trapisondastore.trapisondastore.Shared.Infrastructure.Jobs;
+package com.trapisondastore.trapisondastore.Shared.Infrastructure.Event;
 
 import java.util.HashMap;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.MySQLEventStoreRepository;
+import com.trapisondastore.trapisondastore.Shared.Domain.DomainEvent;
+import com.trapisondastore.trapisondastore.Shared.Domain.DomainEventPublisher;
+import com.trapisondastore.trapisondastore.Shared.Domain.Exception.UnableToPublishDomainEvents;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 
 @Service
-public class PublishDomainEvents {
+public class RabbitMQDomainEventPublisher implements DomainEventPublisher {
 
     @Value("${rabbit.host}")
     private String HOST;
@@ -26,13 +27,8 @@ public class PublishDomainEvents {
     @Value("${rabbit.vhost}")
     private String VHOST;
 
-    @Autowired
-    private MySQLEventStoreRepository repository;
-
-    @Scheduled(fixedDelay = 10000)
-    public void run() throws Exception {
-        var events = repository.getUnprocessed();
-
+    @Override
+    public void publish(List<DomainEvent> events) throws UnableToPublishDomainEvents {
         if (events.isEmpty()) {
             return;
         }
@@ -49,25 +45,16 @@ public class PublishDomainEvents {
             for (var event : events) {
                 var payload = event.getPayload();
 
-                HashMap<String, Object> json = new ObjectMapper().readValue(
-                    payload, HashMap.class
-                );
+                HashMap<String, Object> json = new ObjectMapper().readValue(payload, HashMap.class);
 
                 var data = ((HashMap<String, Object>) json.get("data"));
 
-                channel.basicPublish(
-                    data.get("type").toString().split("\\.")[1],
-                    data.get("type").toString(),
-                    false,
-                    false,
-                    null,
-                    events.get(0).getPayload().getBytes()
-                );
-
-                event.setProcessed();
-
-                repository.save(event);
+                channel.basicPublish(data.get("type").toString().split("\\.")[1],
+                        data.get("type").toString(), false, false, null,
+                        events.get(0).getPayload().getBytes());
             }
+        } catch (Exception e) {
+            throw new UnableToPublishDomainEvents(e.getMessage(), e);
         }
     }
 }
