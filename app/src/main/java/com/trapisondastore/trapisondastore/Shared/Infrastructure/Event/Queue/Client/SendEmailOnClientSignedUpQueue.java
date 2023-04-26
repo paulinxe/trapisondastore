@@ -2,29 +2,34 @@ package com.trapisondastore.trapisondastore.Shared.Infrastructure.Event.Queue.Cl
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import com.rabbitmq.client.DeliverCallback;
+import com.trapisondastore.trapisondastore.Shared.Infrastructure.Event.RabbitMQConnection;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Event.Queue.RabbitQueue;
 
-//@Scheduled(fixedDelay = 2000)
+@Service
 public class SendEmailOnClientSignedUpQueue extends RabbitQueue {
 
-    public SendEmailOnClientSignedUpQueue() throws IOException, TimeoutException {
-        super();
+    private final static String QUEUE_NAME = "client.client.send_email_on_client_signed_up";
+
+    @Autowired
+    public SendEmailOnClientSignedUpQueue(RabbitMQConnection connection) throws IOException, TimeoutException {
+        super(connection);
     }
 
     @Override
-    public void pull() throws IOException {
+    @Scheduled(fixedDelay = 1000)
+    public void process() throws IOException {
         DeliverCallback callback = (consumerTag, delivery) -> {
+            logMessageReceived(SendEmailOnClientSignedUpQueue.class.getName(), QUEUE_NAME);
+
             String message = new String(delivery.getBody(), "UTF-8");
-            // @TODO: conver to some kind of object and invoke use case
+            logger.info(message);
         };
         
-        channel.basicConsume(
-            "client.client.send_email_on_client_signed_up",
-            true,
-            callback,
-            consumerTag -> { }
-        );
+        pull(QUEUE_NAME, callback);
     }
     
 }

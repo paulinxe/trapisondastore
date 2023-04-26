@@ -2,19 +2,40 @@ package com.trapisondastore.trapisondastore.Shared.Infrastructure.Event.Queue;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DeliverCallback;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Event.RabbitMQConnection;
 
 public abstract class RabbitQueue {
 
-    @Autowired
-    private RabbitMQConnection connection;
-    protected Channel channel;
+    private Channel channel;
+    protected Logger logger;
 
-    public RabbitQueue() throws IOException, TimeoutException {
+    public RabbitQueue(RabbitMQConnection connection) throws IOException, TimeoutException {
         channel = connection.connect();
+        logger = LoggerFactory.getLogger(RabbitQueue.class);
     }
 
-    public abstract void pull() throws IOException;
+    public abstract void process() throws IOException;
+
+    final protected void pull(String queue, DeliverCallback callback) throws IOException {
+        channel.basicConsume(
+            queue,
+            true,
+            callback,
+            consumerTag -> { }
+        );
+    };
+
+    protected void logMessageReceived(String className, String queueName) {
+        logger.info(
+            String.format(
+                "[%s] Received message from %s",
+                className,
+                queueName
+            )
+        );
+    }
 }
