@@ -28,6 +28,10 @@ services:
       RABBIT_USERNAME: "trapisondastore"
       RABBIT_PASSWORD: "secret"
       RABBIT_VHOST: "trapisondastore-vhost"
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
     networks:
       default:
 

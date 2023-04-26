@@ -1,10 +1,8 @@
 package com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence;
 
-import java.util.List;
 import java.util.Optional;
 import org.hibernate.SessionFactory;
 import com.trapisondastore.trapisondastore.Shared.Domain.AggregateRoot;
-import com.trapisondastore.trapisondastore.Shared.Domain.DomainEvent;
 
 public abstract class HibernateRepository <T> {
     protected final SessionFactory sessionFactory;
@@ -17,20 +15,9 @@ public abstract class HibernateRepository <T> {
 
     protected void persist(AggregateRoot aggregateRoot) {
         sessionFactory.getCurrentSession().persist(aggregateRoot);
-        
-        List<DomainEvent> events = aggregateRoot.pullEvents();
-        for (var event : events) {
-            sessionFactory.getCurrentSession().persist(event);
-        }
-
         sessionFactory.getCurrentSession().flush();
     }
-
-    protected void persist(DomainEvent event) {
-        sessionFactory.getCurrentSession().merge(event);
-        sessionFactory.getCurrentSession().flush();
-    }
-    
+   
     protected <V> Optional<T> byId(V id) {
         return Optional.ofNullable(sessionFactory.getCurrentSession().byId(aggregateClass).load(id));
     }

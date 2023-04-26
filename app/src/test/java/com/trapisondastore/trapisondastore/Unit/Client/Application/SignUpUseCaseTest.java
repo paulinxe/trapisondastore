@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.PlatformTransactionManager;
 import com.trapisondastore.trapisondastore.Client.Application.Command.SignUpCommand;
 import com.trapisondastore.trapisondastore.Client.Application.Exception.UnableToSignUpException;
 import com.trapisondastore.trapisondastore.Client.Application.UseCase.SignUpUseCase;
@@ -26,6 +27,8 @@ import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClient
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientIdException;
 import com.trapisondastore.trapisondastore.Client.Domain.Exception.InvalidClientPasswordException;
 import com.trapisondastore.trapisondastore.Factory.Client.ClientBuilder;
+import com.trapisondastore.trapisondastore.Shared.Domain.DomainEventPublisher;
+import com.trapisondastore.trapisondastore.Shared.Domain.Exception.UnableToPublishDomainEvents;
 import com.trapisondastore.trapisondastore.Shared.Infrastructure.Persistence.Exception.UnableToBuildAggregateRootException;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +42,12 @@ final class SignUpUseCaseTest {
 
     @Mock
     private PasswordEncryptor passwordEncryptor;
+
+    @Mock
+    private PlatformTransactionManager transactionManager;
+
+    @Mock
+    private DomainEventPublisher publisher;
 
     public void setup() {
         repository = Mockito.mock(ClientRepository.class);
@@ -99,7 +108,7 @@ final class SignUpUseCaseTest {
     @ParameterizedTest
     @MethodSource("validClientData")
     void repository_is_called_when_client_data_is_valid(String id, String email, String password)
-            throws UnableToSignUpException {
+            throws UnableToSignUpException, UnableToPublishDomainEvents {
         Mockito.when(passwordEncryptor.encrypt(any(String.class))).thenReturn("asdsada");
 
         executeUseCase(id, email, password);
@@ -108,7 +117,7 @@ final class SignUpUseCaseTest {
         verify(passwordEncryptor, times(1)).encrypt(any(String.class));
     }
 
-    private void executeUseCase(String id, String email, String password) throws UnableToSignUpException {
+    private void executeUseCase(String id, String email, String password) throws UnableToSignUpException, UnableToPublishDomainEvents {
         SignUpCommand command = new SignUpCommand(id, email, password);
         useCase.execute(command);
     }

@@ -42,6 +42,7 @@ public class SignUpController extends Controller {
         } catch (UnableToSignUpException e) {
             String fieldName = "";
             String errorMessage = "";
+            var status = HttpStatus.BAD_REQUEST;
 
             switch (e.ERROR_CODE) {
                 case UnableToSignUpException.CLIENT_EXISTS:
@@ -56,11 +57,16 @@ public class SignUpController extends Controller {
                     fieldName = "password";
                     errorMessage = "Password must have 8 characters minimum, at least one number and at least one letter";
                     break;
+                case UnableToSignUpException.EVENT_PUBLISHER_FAILED:
+                    fieldName = "error";
+                    errorMessage = "Internal server error";
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+                    break;
             }
 
             objectNode.put(fieldName, errorMessage);
 
-            return new ResponseEntity<ObjectNode>(objectNode, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ObjectNode>(objectNode, status);
         }
 
         objectNode.put("id", clientId);
